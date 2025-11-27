@@ -1,173 +1,165 @@
+OFDM-Based Wireless Communication System (MATLAB)
 
----
+This repository contains a complete MATLAB implementation of a baseband OFDM communication system with AWGN and Rayleigh multipath fading channels. The project includes pilot-based channel estimation and two equalization techniques (ZF and MMSE), along with BER analysis and constellation visualization.
 
-# 📡 **OFDM Communication System – MATLAB Implementation**
+1. Overview
 
-**Author:** Adeetya (Aditya Solanke)
-**Project Type:** DSP + Wireless Communication + MATLAB
-**Status:** **Completed (Basic)** — Advanced features coming soon
+The goal of this project is to simulate a practical OFDM communication chain similar to those used in WiFi, LTE, and 5G systems. The system performs:
 
----
+QPSK modulation
 
-## 🚀 **Project Overview**
+OFDM modulation using IFFT
 
-This project implements a complete **baseband OFDM (Orthogonal Frequency Division Multiplexing)** communication link in MATLAB, including:
+Cyclic prefix insertion
 
-* Bit generation
-* QPSK modulation
-* OFDM modulation using IFFT
-* Cyclic prefix insertion
-* AWGN channel
-* OFDM demodulation via FFT
-* QPSK demodulation
-* Bit Error Rate (BER) calculation
-* BER vs SNR performance curve
+AWGN and Rayleigh multipath fading
 
-This is a clean, modular MATLAB implementation that follows the actual structure used in modern systems like WiFi (802.11), LTE, and 5G OFDM.
+Pilot-based channel estimation
 
----
+ZF and MMSE equalization
 
-## 🧩 **Project Structure**
+FFT-based demodulation
 
-Your folder contains:
+BER vs SNR performance evaluation
 
-```
-📁 Project Folder
- ├── tx_ofdm.m             (OFDM Transmitter)
- ├── channel_awgn.m        (AWGN Channel Model)
- ├── rx_ofdm_basic.m       (Basic OFDM Receiver)
- ├── ofdm_sim_sweep.m      (BER vs SNR Simulation)
- ├── tx_data.mat           (Saved transmit data)
- ├── rx_data.mat           (Saved received data)
- ├── tx_time.png           (Time-domain TX waveform)
- ├── rx_time.png           (AWGN-corrupted RX waveform)
- ├── constellation.png     (QPSK constellation after RX)
- ├── ber_vs_snr.png        (BER vs SNR performance plot)
- ├── ber_vs_snr.csv        (Raw numeric results)
- └── README.md             (Project documentation)
-```
+The simulation demonstrates how multipath affects OFDM and how equalization significantly improves performance.
 
----
+2. System Architecture
 
-## 🔧 **How the System Works**
+Transmitter:
 
-### **1️⃣ Transmitter (tx_ofdm.m)**
+Bit generation
 
-* Generates random binary bits
-* Groups bits into QPSK symbol indices
-* Maps symbols using `pskmod`
-* Applies IFFT → time-domain OFDM symbol
-* Adds cyclic prefix
-* Saves `tx_data.mat` + `tx_time.png`
+QPSK modulation
 
----
+Pilot insertion
 
-### **2️⃣ Channel (channel_awgn.m)**
+IFFT (OFDM modulation)
 
-* Adds AWGN noise at a chosen SNR
-* Saves `rx_data.mat` + `rx_time.png`
+Cyclic prefix addition
 
----
+Channel:
 
-### **3️⃣ Receiver (rx_ofdm_basic.m)**
+AWGN noise
 
-* Removes cyclic prefix
-* Applies FFT
-* QPSK demodulates using `pskdemod`
-* Reconstructs bits
-* Compares TX vs RX → computes BER
-* Saves `constellation.png`
+Rayleigh multipath fading (4-tap tapped delay line)
 
----
+Receiver:
 
-### **4️⃣ BER vs SNR Sweep (ofdm_sim_sweep.m)**
+Remove cyclic prefix
 
-* Runs 200 OFDM symbols across SNRs 0 to 20 dB
-* Calculates BER for each SNR
-* Saves:
+FFT
 
-  * `ber_vs_snr.png`
-  * `ber_vs_snr.csv`
+Extract pilots
 
----
+Channel estimation (LS + interpolation)
 
-## 📊 **Results**
+Equalization (ZF / MMSE)
 
-### **🟦 BER Performance (QPSK-OFDM)**
+QPSK demodulation
 
-See `ber_vs_snr.png` for the curve.
+BER calculation
 
-Typical result:
+3. Key Features
 
-* High BER at 0 dB
-* Error floor drops rapidly as SNR increases
-* At 12–15 dB → BER reaches ~0
+OFDM modulation/demodulation
 
----
+Pilot-based LS channel estimation
 
-## 🎯 **Key Learnings**
+Rayleigh multipath fading channel
 
-By completing this project, you demonstrate knowledge of:
+Zero-Forcing and MMSE equalization
 
-✔ Digital modulation (QPSK)
-✔ OFDM baseband processing
-✔ FFT/IFFT operations
-✔ Cyclic prefix usage
-✔ AWGN channel simulation
-✔ Bit error rate evaluation
-✔ MATLAB signal processing
-✔ DSP system-level thinking
+BER vs SNR curves
 
-This aligns strongly with roles in:
+Constellation diagrams for AWGN, no-EQ, ZF, and MMSE
 
-* DSP Engineering
-* Wireless Communications
-* FPGA/RTL + Communication Systems
-* Embedded Communication Firmware
+Fully parameterized MATLAB code
 
----
+4. File Structure
+/src
+    tx_ofdm.m
+    channel_awgn.m
+    rx_ofdm_basic.m
+    ofdm_pilots_multipath_updated.m
+    ofdm_sim_sweep.m
 
-## 🔥 **Planned Advanced Features (Coming Soon)**
+/results
+    ber_compare.png
+    ber_compare.csv
+    constellation_awgn_example.png
+    constellation_noeq_example.png
+    constellation_zf_example.png
+    constellation_mmse_example.png
 
-### **Phase 2 — DSP Enhancements**
+README.md
+LICENSE
 
-* Pilot subcarriers
-* Channel estimation (LS / MMSE)
-* Zero-Forcing equalizer
-* MMSE equalizer
 
-### **Phase 3 — Wireless System Reality**
+(Your actual structure may vary — adjust as needed.)
 
-* Multipath fading channel (Rayleigh, tapped delay line)
-* BER comparison: AWGN vs fading vs equalized
-* Synchronization (optional)
+5. Parameters Used
+Parameter	Value
+Subcarriers (N)	64
+Cyclic Prefix	16 samples
+Modulation	QPSK
+Pilot Spacing	Every 4th subcarrier
+Channel	4-tap Rayleigh fading
+Equalizers	ZF, MMSE
+SNR Range	0 to 20 dB
+OFDM Symbols per SNR	200
+6. Running the Simulation
 
-### **Phase 4 — Communication Engineering Skills**
+In MATLAB:
 
-* LDPC / convolutional coding (FEC)
-* Frequency offset estimation
-* Fixed-point OFDM (FPGA ready)
-* Mapping some blocks to SystemVerilog
+Place all .m files in the same directory
 
----
+Set current folder to the project directory
 
-## 🛠 **How to Run**
+Run:
 
-Open MATLAB → Change current folder to project folder → Run:
+ofdm_pilots_multipath_updated
 
-1. `tx_ofdm.m`
-2. `channel_awgn.m`
-3. `rx_ofdm_basic.m`
-4. `ofdm_sim_sweep.m`
 
-All generated figures & data will appear in the same folder.
+Results will be saved in the folder:
 
----
+ber_compare.png
 
-## 📎 **Notes**
+ber_compare.csv
 
-* The system is fully parameterized (N, cp, M, numSymbols, SNR list).
-* You can easily extend this into a research paper–style project.
-* Perfect for GitHub, LinkedIn, and resume portfolio.
+constellation images
 
----
+7. Results Summary
+
+AWGN channel achieves near-zero BER at moderate SNR.
+
+Multipath without equalization performs poorly.
+
+ZF equalization improves performance but amplifies noise at low SNR.
+
+MMSE equalization gives the best performance across all SNR values.
+
+Constellation plots clearly show distortion and correction.
+
+8. Future Work
+
+Potential improvements:
+
+CFO and timing synchronization
+
+LMMSE channel estimation
+
+Forward error correction (LDPC, Turbo, Convolutional codes)
+
+Adaptive modulation (QPSK, 16-QAM, 64-QAM)
+
+MIMO-OFDM (2×2, 4×4)
+
+FPGA/RTL implementation of OFDM blocks
+
+SDR-based over-the-air transmission
+
+9. License
+
+This project is released under the MIT License.
+See the LICENSE file for details.
